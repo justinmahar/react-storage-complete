@@ -15,6 +15,8 @@
 
 Read the **[official documentation](https://justinmahar.github.io/react-storage-complete/)**.
 
+#### Project Under Development
+
 ## Overview
 
 This section will contain an overview so people can have a high-level understanding of the project.
@@ -47,6 +49,7 @@ Your support helps keep the project going and will earn you some serious virtual
 ## Table of Contents 
 
 - [Documentation](#documentation)
+    - [Project Under Development](#project-under-development)
 - [Overview](#overview)
   - [Features include:](#features-include)
 - [Donate](#donate)
