@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "coreVersion": "2.4.10",
   "author": "Justin Mahar <contact@justinmahar.com>",
-  "description": "React hooks for accessing the Web Storage API. Supports localStorage and sessionStorage with prefixing.",
+  "description": "🗄️ React hooks for accessing localStorage and sessionStorage, with syncing and prefix support. The most complete package!",
   "homepage": "https://justinmahar.github.io/react-storage-complete/",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
