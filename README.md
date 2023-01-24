@@ -2,7 +2,7 @@
   🗄️ React Storage Complete
 </h2>
 <h3 align="center">
-  React hooks for accessing the Web Storage API.<br/>Supports `localStorage` and `sessionStorage`, with scoping.
+  React hooks for accessing the Web Storage API.<br/>Supports localStorage and sessionStorage with prefixing.
 </h3>
 <p align="center">
   <a href="https://badge.fury.io/js/react-storage-complete" target="_blank" rel="noopener noreferrer"><img src="https://badge.fury.io/js/react-storage-complete.svg" alt="npm Version" /></a>&nbsp;

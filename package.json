@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "coreVersion": "2.4.10",
   "author": "Justin Mahar <contact@justinmahar.com>",
-  "description": "React hooks for accessing the Web Storage API. Supports localStorage and sessionStorage, with scoping.",
+  "description": "React hooks for accessing the Web Storage API. Supports localStorage and sessionStorage with prefixing.",
   "homepage": "https://justinmahar.github.io/react-storage-complete/",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -34,6 +34,8 @@
     "hooks",
     "local",
     "localStorage",
+    "prefix",
+    "prefixed",
     "scope",
     "scoped",
     "session",
@@ -57,6 +59,7 @@
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.48.1",
     "babel-loader": "^9.1.2",
+    "bootstrap": "^5.2.3",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -66,11 +69,15 @@
     "lockblocks": "^1.1.1",
     "prettier": "^2.8.2",
     "react": "^17.0.2",
+    "react-bootstrap": "^2.7.0",
     "react-dom": "^17.0.2",
     "react-html-props": "^1.0.32",
     "react-markdown": "^8.0.3",
     "replace-in-file": "^6.3.5",
     "typescript": "^4.9.4",
     "webpack": "^5.75.0"
+  },
+  "dependencies": {
+    "react-sub-unsub": "^2.1.11"
   }
 }
