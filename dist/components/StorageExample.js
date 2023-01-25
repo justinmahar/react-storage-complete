@@ -113,7 +113,7 @@ const LocalStorageExample = (_a) => {
                             react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "text", placeholder: "object.str string value", value: (_b = storedObject === null || storedObject === void 0 ? void 0 : storedObject.str) !== null && _b !== void 0 ? _b : '', onChange: (e) => setStoredObject(Object.assign(Object.assign({}, storedObject), { str: e.target.value })) }),
                             react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "number", placeholder: "object.num number value", value: (_c = storedObject === null || storedObject === void 0 ? void 0 : storedObject.num) !== null && _c !== void 0 ? _c : '', onChange: (e) => setStoredObject(Object.assign(Object.assign({}, storedObject), { num: Number.parseInt(e.target.value) })) }),
                             react_1.default.createElement(react_bootstrap_1.Form.Check, { label: "object.bool value", className: "user-select-none", id: "stored-object-bool-id", checked: !!(storedObject === null || storedObject === void 0 ? void 0 : storedObject.bool), onChange: (e) => setStoredObject(Object.assign(Object.assign({}, storedObject), { bool: e.target.checked })) }),
-                            react_1.default.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: () => clearStoredBoolean() }, "Clear/Reset")),
+                            react_1.default.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: () => clearStoredObject() }, "Clear/Reset")),
                         react_1.default.createElement(react_bootstrap_1.Form.Text, { className: "text-muted" },
                             "Value: ",
                             JSON.stringify(storedObject))),
