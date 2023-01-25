@@ -157,9 +157,7 @@ In this example:
 #### Clearing The Value
 
 ```jsx
-const [name, setName, initialized, clear] = useLocalStorage('name', 'Guest', {
-  prefix: 'my-namespace',
-});
+const [name, setName, initialized, clear] = useLocalStorage('name', 'Guest');
 ```
 
 You can clear any stored value and completely remove it from storage using the returned clear function. 
