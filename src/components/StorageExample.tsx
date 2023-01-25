@@ -157,7 +157,7 @@ export const LocalStorageExample = ({ useStorage, ...props }: LocalStorageExampl
                     checked={!!storedObject?.bool}
                     onChange={(e) => setStoredObject({ ...storedObject, bool: e.target.checked })}
                   />
-                  <Button variant="primary" onClick={() => clearStoredBoolean()}>
+                  <Button variant="primary" onClick={() => clearStoredObject()}>
                     Clear/Reset
                   </Button>
                 </div>
