@@ -17,6 +17,12 @@ const useSessionStorage_1 = require("../hooks/useSessionStorage");
 exports.default = {
     title: 'Stories/Web Storage',
     component: StorageExample_1.LocalStorageExample,
+    parameters: {
+        controls: {
+            disabled: true,
+        },
+        options: { showPanel: false },
+    },
 };
 const Template = (args) => react_1.default.createElement(StorageExample_1.LocalStorageExample, Object.assign({}, args));
 exports.LocalStorage = Template.bind({});
