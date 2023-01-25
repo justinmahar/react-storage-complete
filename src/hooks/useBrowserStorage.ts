@@ -87,8 +87,8 @@ export function useBrowserStorage<T = any>(
   React.useEffect(() => {
     const subs = new Subs();
     if (!opts.emitterDisabled) {
-      const changeEventListener = (changedKey: string) => {
-        if (scopedStorageKey === changedKey) {
+      const changeEventListener = (changedKey: string, storageArea: Storage) => {
+        if (scopedStorageKey === changedKey && storage === storageArea) {
           try {
             setState(getDecodedValue());
           } catch (e) {
@@ -99,7 +99,7 @@ export function useBrowserStorage<T = any>(
       subs.subscribeEvent(storageEventEmitter, EMITTER_CHANGE_EVENT_NAME, changeEventListener);
     }
     return subs.createCleanup();
-  }, [getDecodedValue, opts.emitterDisabled, scopedStorageKey]);
+  }, [getDecodedValue, opts.emitterDisabled, storage, scopedStorageKey]);
 
   // Sync with other open browser tabs via Window Storage Events
   // See: https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event
@@ -135,7 +135,7 @@ export function useBrowserStorage<T = any>(
               setState(value);
               storage[scopedStorageKey] = encoded;
               if (!opts.emitterDisabled) {
-                storageEventEmitter.emit(EMITTER_CHANGE_EVENT_NAME, scopedStorageKey);
+                storageEventEmitter.emit(EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage);
               }
             } catch (e) {
               console.error(
@@ -155,7 +155,7 @@ export function useBrowserStorage<T = any>(
             setState(null);
             delete storage[scopedStorageKey];
             if (!opts.emitterDisabled) {
-              storageEventEmitter.emit(EMITTER_CHANGE_EVENT_NAME, scopedStorageKey);
+              storageEventEmitter.emit(EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage);
             }
           }
         } catch (e) {
