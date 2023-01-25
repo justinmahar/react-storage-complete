@@ -132,15 +132,17 @@ This is useful for compartmentalizing local settings for multiple purposes. For 
 With `react-storage-complete`, managing stored data for multiple user accounts in the same browser is easy.
 
 ```jsx
-const [name, setName, initialized, clear, prefixedKey] = useLocalStorage('name', 'Guest', {
-  shouldInitialize: user && typeof user.id === 'string',
-  prefix: user ? user.id : undefined,
+const [name, setName, initialized] = useLocalStorage('name', 'Guest', {
+  prefix: user?.id, // Undefined until user ID is available
+  shouldInitialize: !!user?.id, // Only initialize when user ID is available
 });
 ```
 
 As shown above, you can delay initialization of the stored value until your prefix is available and ready to use as the namespace. For example, a user ID may not be ready until logged in, but you may still be calling the hook in your app before that happens.
 
-In this case, `initialized` will be `false` until the `user.id` is loaded and ready to use as the prefix and the value has been retrieved from `localStorage`, at which time `initialized` will then be `true` and your value will be ready.
+In this case:
+- `initialized` will be `false` until the `user.id` is loaded and ready to use as the prefix.
+- When `shouldInitialize` is `true`, the stored value is retrieved from `localStorage`. Then, `initialized` will return as `true`, and your value will be ready to use!
 
 #### Clearing The Value
 
