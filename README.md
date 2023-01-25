@@ -82,10 +82,10 @@ npm i react-storage-complete
 
 ## Quick Start
 
-| Use this hook...    | For this Storage API... | Storage Description                                                                                                                                      |
-| ------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `useLocalStorage`   | `localStorage`          | The `localStorage` object stores data with no expiration date. The data is not deleted when the browser is closed, and is available for future sessions. |
-| `useSessionStorage` | `sessionStorage`        | The `sessionStorage` object stores data for only one session. The data is deleted when the browser is closed.                                            |
+| Use this hook...                                                                                                     | For this Storage API... | Storage Description                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [useLocalStorage](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--page)     | `localStorage`          | The `localStorage` object stores data with no expiration date. The data is not deleted when the browser is closed, and is available for future sessions. |
+| [useSessionStorage](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-usesessionstorage--page) | `sessionStorage`        | The `sessionStorage` object stores data for only one session. The data is deleted when the browser is closed.                                            |
 
 #### Basic Usage
 
@@ -166,7 +166,7 @@ const [food, setFood, initialized, clear, prefixedKey] = useLocalStorage('food',
 
 The hook also returns the prefixed key, in case you want direct access to it. 
 
-In the example above, the prefixed key would be `my-namespace.food`.
+In the example above, the prefixed key would be `my-namespace.food`. You can customize the separator by providing the `prefixSeparator` option.
 
 #### Additional Options & Uses
 
