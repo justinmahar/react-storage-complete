@@ -59,8 +59,8 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
     react_1.default.useEffect(() => {
         const subs = new react_sub_unsub_1.Subs();
         if (!opts.emitterDisabled) {
-            const changeEventListener = (changedKey) => {
-                if (scopedStorageKey === changedKey) {
+            const changeEventListener = (changedKey, storageArea) => {
+                if (scopedStorageKey === changedKey && storage === storageArea) {
                     try {
                         setState(getDecodedValue());
                     }
@@ -72,7 +72,7 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
             subs.subscribeEvent(exports.storageEventEmitter, exports.EMITTER_CHANGE_EVENT_NAME, changeEventListener);
         }
         return subs.createCleanup();
-    }, [getDecodedValue, opts.emitterDisabled, scopedStorageKey]);
+    }, [getDecodedValue, opts.emitterDisabled, storage, scopedStorageKey]);
     // Sync with other open browser tabs via Window Storage Events
     // See: https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event
     react_1.default.useEffect(() => {
@@ -106,7 +106,7 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
                         setState(value);
                         storage[scopedStorageKey] = encoded;
                         if (!opts.emitterDisabled) {
-                            exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey);
+                            exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage);
                         }
                     }
                     catch (e) {
@@ -117,7 +117,7 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
                     setState(null);
                     delete storage[scopedStorageKey];
                     if (!opts.emitterDisabled) {
-                        exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey);
+                        exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage);
                     }
                 }
             }
