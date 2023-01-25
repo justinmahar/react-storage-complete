@@ -53,6 +53,8 @@ const [name, setName] = useLocalStorage('name', 'Guest', {
 
 For example, by using a user ID as the prefix, you can scope the stored data to the user and avoid mixing settings.
 
+Above, the key for the value would be `my-namespace.name`.
+
 ##### Namespacing Using User IDs
 
 With `react-storage-complete`, managing stored data for multiple user accounts in the same browser is easy.
