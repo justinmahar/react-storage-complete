@@ -147,7 +147,7 @@ In this case:
 #### Clearing The Value
 
 ```jsx
-const [name, setName, initialized, clear, prefixedKey] = useLocalStorage('name', 'Guest', {
+const [name, setName, initialized, clear] = useLocalStorage('name', 'Guest', {
   prefix: 'my-namespace',
 });
 ```
@@ -166,7 +166,9 @@ const [food, setFood, initialized, clear, prefixedKey] = useLocalStorage('food',
 
 The hook also returns the prefixed key, in case you want direct access to it. 
 
-In the example above, the prefixed key would be `my-namespace.food`. You can customize the separator by providing the `prefixSeparator` option.
+In the example above, the prefixed key would be `my-namespace.food`. 
+
+> You can customize the separator by providing the `prefixSeparator` option.
 
 #### Additional Options & Uses
 
