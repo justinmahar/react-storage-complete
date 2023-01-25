@@ -1,21 +1,29 @@
-import {
-  DEFAULT_BROWSER_STORAGE_OPTIONS,
-  BrowserStorageOptions,
-  StorageState,
-  useBrowserStorage,
-} from './useBrowserStorage';
+import { DEFAULT_BROWSER_STORAGE_OPTIONS, StorageOptions, StorageState, useBrowserStorage } from './useBrowserStorage';
 
 /**
- * Use a local storage item. Use this in a similar fashion to `React.useState()`.
+ * Access a `localStorage` item. Use this in a similar fashion to `React.useState()`.
+ *
+ * See the [documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--page).
+ *
+ * Examples:
+ *
+ * ```jsx
+ * const [value, setValue] = useLocalStorage('key');
+ * const [value, setValue] = useLocalStorage('key', 'Default');
+ * const [value, setValue, initialized, clear, prefixedKey] = useLocalStorage('key', 'Default', {
+ *   prefix: 'my-namespace',
+ * });
+ * ```
+ *
  * @param key The key for the stored item.
- * @param defaultWhenUndefined The default value for the item when it is undefined in localStorage.
- * @param options Options for the stored item, such as: `prefix` prefix (default `''`), `prefixDivider` (separates prefix from key name, default `.`, ignored when prefix is `''`), the `encode` function, and the `decode` function. All are optional.
- * @returns An array of values in the shape: `[state: T | null | undefined, setState: (val: T | null) => void, initialized: boolean, clear: () => void, prefixedStorageKey: boolean]`. The `initialized` value indicates whether the value has been read from localStorage. Will be false when `prefix` option is undefined.
+ * @param defaultWhenUndefined The default value for the item when it is undefined in `localStorage`.
+ * @param options Options for the stored item. See the [documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--page#props) for more.
+ * @returns The storage state. See the [documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--page#return) for details.
  */
 export function useLocalStorage<T = any>(
   key: string,
   defaultWhenUndefined: T | null | undefined = undefined,
-  options: BrowserStorageOptions<T> = DEFAULT_BROWSER_STORAGE_OPTIONS,
+  options: StorageOptions<T> = DEFAULT_BROWSER_STORAGE_OPTIONS,
 ): StorageState<T> {
   return useBrowserStorage<T>(key, defaultWhenUndefined, localStorage, options);
 }

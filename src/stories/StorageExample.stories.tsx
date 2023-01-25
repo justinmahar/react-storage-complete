@@ -14,6 +14,12 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 export default {
   title: 'Stories/Web Storage',
   component: LocalStorageExample,
+  parameters: {
+    controls: {
+      disabled: true,
+    },
+    options: { showPanel: false },
+  },
 } as ComponentMeta<typeof LocalStorageExample>;
 
 const Template: ComponentStory<typeof LocalStorageExample> = (args) => <LocalStorageExample {...args} />;

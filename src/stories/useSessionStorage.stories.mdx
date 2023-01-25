@@ -6,87 +6,171 @@ import { Meta } from '@storybook/addon-docs';
 
 ## Description
 
-Description of the [hook](https://reactjs.org/docs/hooks-intro.html).
+Hook for easily accessing `sessionStorage`, with a similar interface to `React.useState()`.
+
+| Use this hook...                                                                                                     | For this Storage API...                                                                    | Storage Description                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [useLocalStorage](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--page)     | [`localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)     | The `localStorage` object stores data with no expiration date. The data is not deleted when the browser is closed, and is available for future sessions. |
+| [useSessionStorage](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-usesessionstorage--page) | [`sessionStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) | The `sessionStorage` object stores data for only one session. The data is deleted when the browser is closed.                                            |
 
 ## Usage
 
 ```jsx
-import { useExample } from 'react-kindling';
+import { useSessionStorage } from 'react-storage-complete';
 ```
 
-In your function component:
+In your component or hook:
 
 ```jsx
-const [value, setValue] = useExample('Example value');
+const [name, setName] = useSessionStorage('name');
 ```
 
-Describe how this would be used.
+This will store and retrieve the value using the `name` key in `sessionStorage`.
+
+> Note: If using TypeScript, you can provide a value type like so: `useSessionStorage<string>('name')`.
+
+#### Providing A Default Value
+
+You can also provide a default value for when the stored value is `undefined` (not currently set in `sessionStorage`):
+
+```jsx
+const [name, setName] = useSessionStorage('name', 'Guest');
+```
+
+In this example, when the stored item with the key `name` is `undefined`, the `name` value will be `Guest`.
+
+> Note: When a value is `null` in storage, `null` is returned, not the provided default.
+
+#### Namespacing Using Prefix
+
+You can namespace stored items using a prefix:
+
+```jsx
+const [name, setName] = useSessionStorage('name', 'Guest', {
+  prefix: 'my-namespace',
+});
+```
+
+For example, by using a user ID as the prefix, you can scope the stored data to the user and avoid mixing settings.
+
+##### Namespacing Using User IDs
+
+With `react-storage-complete`, managing stored data for multiple user accounts in the same browser is easy.
+
+```jsx
+const [name, setName, initialized] = useSessionStorage('name', 'Guest', {
+  prefix: user?.id, // Undefined until user ID is available as a namespace
+  shouldInitialize: !!user?.id, // Only initialize when user ID is available
+});
+```
+
+As shown above, you can delay initialization of the stored value until your prefix is available and ready to use as the namespace.
+
+For example, a user ID may not be ready until logged in, but you may still be calling the hook in your app before that happens.
+
+In this example:
+
+- `initialized` will be `false` until the `user.id` is loaded and ready to use as the prefix.
+- When `shouldInitialize` is `true`, the prefix is used with the key to retrieve the stored value from `sessionStorage`.
+- Then, `initialized` will return as `true`, and your value will be ready to use!
+
+#### Clearing The Value
+
+```jsx
+const [name, setName, initialized, clear] = useSessionStorage('name', 'Guest', {
+  prefix: 'my-namespace',
+});
+```
+
+You can clear any stored value and completely remove it from storage using the returned clear function.
+
+In this example, calling `clear()` will delete the item from storage. You can also call `setName(undefined)` to achieve the same result.
+
+#### Accessing The Prefixed Key
+
+```jsx
+const [food, setFood, initialized, clear, prefixedKey] = useSessionStorage('food', 'Hamburger', {
+  prefix: 'my-namespace',
+});
+```
+
+The hook also returns the prefixed key, in case you want direct access to it.
+
+In the example above, the prefixed key would be `my-namespace.food`.
+
+> You can customize the separator by providing the `prefixSeparator` option.
 
 ## Signature
 
-`useExample(defaultValue: string) => [value, setValue]`
+```tsx
+useSessionStorage<T>(
+  key: string,
+  defaultWhenUndefined: T | null | undefined,
+  options: StorageOptions<T>,
+) => [value, setValue, initialized, clear, prefixedKey]
+```
 
 ### Props
 
-| Prop         | Type                        | Description   |
-| ------------ | --------------------------- | ------------- |
-| defaultValue | `string` &#124; `undefined` | Default value |
+| Prop                   | Type                                 | Description                                                                                 |
+| ---------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `key`                  | `string`                             | **Required.** The key used to access the stored item in `sessionStorage`.                   |
+| `defaultWhenUndefined` | `T` &#124; `null` &#124; `undefined` | Optional. The value to return when the stored item is `undefined`. Default `undefined`.     |
+| `options`              | `StorageOptions` &#124; `undefined`  | Optional. Option to use for the stored item. See [`StorageOptions`](#storageoptions) below. |
+
+#### StorageOptions
+
+An object with the following properties:
+
+| Property                       | Type                | Description                                                                                                                                                                                                       |
+| ------------------------------ | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `prefix`                       | `string`            | A prefix used to namespace the key in storage.                                                                                                                                                                    |
+| `prefixSeparator`              | `string`            | The separator used between the prefix and the key. Default `'.'`                                                                                                                                                  |
+| `shouldInitialize`             | `boolean`           | The value is not read from `sessionStorage`, or set, when this is `false`. Can be used to wait until `prefix` is ready (such as a user ID being loaded). Setter will have no effect when `false`. Default `true`. |
+| `emitterDisabled`              | `boolean`           | The hook will synchronize changes with hooks using the same key in other components via an emitter. You can disable this feature if you'd like by setting this to `true`. Default `false`.                        |
+| `storageEventListenerDisabled` | `boolean`           | The hook will synchronize storage changes made in other tabs via the Window Storage Event API. You can disable this feature if you'd like by setting this to `true`. Default `false`.                             |
+| `encode`                       | `StorageEncoder<T>` | Specify a custom encoder for your values. See [encoders and decoders](#custom-encoders-and-decoders). Defaults to `JSON.stringify()` encoding.                                                                    |
+| `decode`                       | `StorageDecoder<T>` | Specify a custom decoder for your values. See [encoders and decoders](#custom-encoders-and-decoders). Defaults to `JSON.parse()` decoding.                                                                        |
+
+> All properties are optional.
+
+##### Custom Encoders and Decoders
+
+The default encoder and decoder use `JSON.stringify()` and `JSON.parse()` respectively.
+
+If this is not sufficient and you'd like to encode and decode values yourself, you can provide your own functions.
+
+The encode and decode functions have the following types:
+
+```ts
+type StorageEncoder<T> = (value: T | null) => string | null;
+type StorageDecoder<T> = (itemString: string | null) => T | null;
+```
+
+Here are the ones used in this hook by default, as a starting point:
+
+```tsx
+export function defaultEncode<T>(value: T | null): string | null {
+  return value !== null && typeof value !== 'undefined' ? JSON.stringify(value) : null;
+}
+
+export function defaultDecode<T>(itemString: string | null): T | null {
+  return itemString !== null && typeof itemString !== 'undefined' ? JSON.parse(itemString) : null;
+}
+```
 
 ### Return
 
 The hook returns an [array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) containing:
 
-| Index | Name     | Type                     | Description                    |
-| ----- | -------- | ------------------------ | ------------------------------ |
-| 0     | value    | `string`                 | The example value              |
-| 1     | setValue | `(value: string) ⇒ void` | A setter for the example value |
+| Index | Name        | Type                                                 | Description                                                                                                                                                                    |
+| ----- | ----------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 0     | value       | `T` &#124; `null` &#124; `undefined`                 | The value of type `T` (the type of data you're storing) retrieved from `sessionStorage`, or the default (if provided to hook) when `undefined`.                                |
+| 1     | setValue    | (value: `T` &#124; `null` &#124; `undefined`) ⇒ void | Sets the stored value to `sessionStorage`. This also notifies other hooks of the change via the emitter when `emitterDisabled` option is `false`.                              |
+| 2     | initialized | `boolean`                                            | This is `true` when the value is initialized and ready to read. Only `false` when `shouldInitialize` option is `false`.                                                        |
+| 3     | clear       | `() => void`                                         | Delete the value from `sessionStorage`.                                                                                                                                        |
+| 4     | prefixedKey | `string`                                             | The prefixed key. This is the prefix (if provided to the hook) plus the prefix separator plus the key. Will be just the key if no prefix (or empty string prefix) is provided. |
 
-<h5 style={{ color: 'red', background: 'yellow' }}>
-  &nbsp;OR <small>(choose return type, delete others)</small>
-</h5>
+## Demo
 
-The hook returns an [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) containing:
-
-| Property     | Type     | Description       |
-| ------------ | -------- | ----------------- |
-| propertyName | `string` | The example value |
-
-<h5 style={{ color: 'red', background: 'yellow' }}>
-  &nbsp;OR <small>(choose return type, delete others)</small>
-</h5>
-
-The hook returns a function, `functionName`.
-
-#### `functionName() => void`
-
-Describe what the function does.
-
-| Argument | Type     | Description                                  |
-| -------- | -------- | -------------------------------------------- |
-| argName  | `string` | Description of the return function argument. |
-
-##### Return Function Example:
-
-```jsx
-const functionName = useExample();
-...
-functionName("example")
-```
-
-<h5 style={{ color: 'red', background: 'yellow' }}>
-  &nbsp;OR <small>(choose return type, delete others)</small>
-</h5>
-
-The hook returns a `RETURN_TYPE` for WHAT_IT_IS_FOR.
-
-## Example
-
-```jsx
-import * as React from 'react';
-import { useExample } from 'react-kindling';
-
-export function Example() {
-  const [example] = useExample('blue');
-  return <div>Hook example - Color: {example}</div>;
-}
-```
+See the [Session Storage demo](https://justinmahar.github.io/react-storage-complete/?path=/story/stories-web-storage--session-storage) for a live interactive example of the hook in use.

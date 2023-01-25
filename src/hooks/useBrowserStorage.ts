@@ -2,7 +2,7 @@ import React from 'react';
 import EventEmitter from 'events';
 import { Subs } from 'react-sub-unsub';
 
-export interface BrowserStorageOptions<T> {
+export interface StorageOptions<T> {
   prefix?: string;
   prefixSeparator?: string;
   shouldInitialize?: boolean;
@@ -12,7 +12,7 @@ export interface BrowserStorageOptions<T> {
   decode?: StorageDecoder<T>;
 }
 
-export const DEFAULT_BROWSER_STORAGE_OPTIONS: BrowserStorageOptions<any> = {
+export const DEFAULT_BROWSER_STORAGE_OPTIONS: StorageOptions<any> = {
   prefix: undefined,
   prefixSeparator: '.',
   shouldInitialize: true,
@@ -28,7 +28,7 @@ export function useBrowserStorage<T = any>(
   key: string,
   defaultWhenUndefined: T | null | undefined,
   storage: Storage,
-  options: BrowserStorageOptions<T> = DEFAULT_BROWSER_STORAGE_OPTIONS,
+  options: StorageOptions<T> = DEFAULT_BROWSER_STORAGE_OPTIONS,
 ): StorageState<T> {
   const opts = React.useMemo(() => {
     return { ...DEFAULT_BROWSER_STORAGE_OPTIONS, ...options };

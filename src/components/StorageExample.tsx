@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import { Badge, Button, Card, Form, ListGroup, Spinner } from 'react-bootstrap';
 import { DivProps } from 'react-html-props';
-import { BrowserStorageOptions } from '../hooks/useBrowserStorage';
+import { StorageOptions } from '../hooks/useBrowserStorage';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 type StorageHook = typeof useLocalStorage;
@@ -23,7 +23,7 @@ export const LocalStorageExample = ({ useStorage, ...props }: LocalStorageExampl
   const [storageEventListenerDisabled, setStorageEventListenerDisabled] = React.useState(false);
 
   const storageOptions = React.useMemo(() => {
-    const options: BrowserStorageOptions<any> = {};
+    const options: StorageOptions<any> = {};
     if (prefixEnabled) {
       options.prefix = prefix;
     }
