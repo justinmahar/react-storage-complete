@@ -4,7 +4,7 @@ export interface BrowserStorageOptions<T> {
     prefix?: string;
     prefixSeparator?: string;
     shouldInitialize?: boolean;
-    emitterListenerDisabled?: boolean;
+    emitterDisabled?: boolean;
     storageEventListenerDisabled?: boolean;
     encode?: StorageEncoder<T>;
     decode?: StorageDecoder<T>;

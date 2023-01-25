@@ -11,7 +11,7 @@ exports.DEFAULT_BROWSER_STORAGE_OPTIONS = {
     prefix: undefined,
     prefixSeparator: '.',
     shouldInitialize: true,
-    emitterListenerDisabled: false,
+    emitterDisabled: false,
     storageEventListenerDisabled: false,
     encode: defaultEncode,
     decode: defaultDecode,
@@ -23,7 +23,7 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
         options.prefix,
         options.prefixSeparator,
         options.shouldInitialize,
-        options.emitterListenerDisabled,
+        options.emitterDisabled,
         options.storageEventListenerDisabled,
     ]); // Don't include `options` or the encoders, they may change on every render
     const [initialized, setInitialized] = react_1.default.useState(!!opts.shouldInitialize);
@@ -58,7 +58,7 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
     // Sync with all hook instances through an emitter
     react_1.default.useEffect(() => {
         const subs = new react_sub_unsub_1.Subs();
-        if (!opts.emitterListenerDisabled) {
+        if (!opts.emitterDisabled) {
             const changeEventListener = (changedKey) => {
                 if (scopedStorageKey === changedKey) {
                     try {
@@ -72,7 +72,7 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
             subs.subscribeEvent(exports.storageEventEmitter, exports.EMITTER_CHANGE_EVENT_NAME, changeEventListener);
         }
         return subs.createCleanup();
-    }, [getDecodedValue, opts.emitterListenerDisabled, scopedStorageKey]);
+    }, [getDecodedValue, opts.emitterDisabled, scopedStorageKey]);
     // Sync with other open browser tabs via Window Storage Events
     // See: https://developer.mozilla.org/en-US/docs/Web/API/Window/storage_event
     react_1.default.useEffect(() => {
@@ -105,7 +105,9 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
                         opts.decode(encoded);
                         setState(value);
                         storage[scopedStorageKey] = encoded;
-                        exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey);
+                        if (!opts.emitterDisabled) {
+                            exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey);
+                        }
                     }
                     catch (e) {
                         console.error('Error while testing decoding during set operation:', scopedStorageKey, 'Error:', e, 'Value was:', value, 'Could not decode after encoded as:', encoded, 'This value could not be decoded properly. Try 1) checking the value, 2) checking your decoder, or 3) if using the default decoder (which uses JSON.parse), try specifying your own.');
@@ -114,7 +116,9 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
                 if (typeof value === 'undefined') {
                     setState(null);
                     delete storage[scopedStorageKey];
-                    exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey);
+                    if (!opts.emitterDisabled) {
+                        exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey);
+                    }
                 }
             }
             catch (e) {
