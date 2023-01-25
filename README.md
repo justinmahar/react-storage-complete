@@ -15,18 +15,22 @@
 
 Read the **[official documentation](https://justinmahar.github.io/react-storage-complete/)**.
 
-# **🚧 Project Under Development 🚧**
-
-### Documentation Coming Soon (1/24/23)
-
 ## Overview
 
-This section will contain an overview so people can have a high-level understanding of the project.
+Hooks for easily accessing `localStorage` and `sessionStorage`, with a similar interface to `React.useState()`.
 
 ### Features include:
 
-- **🚀 List your features, use fun [emojis](https://emojipedia.org/search/?q=rocket)**
-  - Give a little more info on each feature or mention benefits.
+- **🔄 Automatic state synchronization**
+  - Changes are synchronized across hooks, and even different browser tabs, automatically.
+- **👨‍👩‍👧‍👦 Namespacing using prefixes**
+  - Easily scope your stored data with namespaces. Great for managing data for multiple users.
+- **🔢 Support for primitives and objects**
+  - Store and retrieve strings, booleans, numbers, and objects effortlessly.
+- **👾 Customizable**
+  - Want to store something unusual? Just provide your own encoder and decoder.
+- **💁 Default values**
+  - Optional support for defaults is baked right in.
 
 [lock:donate]::🚫---------------------------------------
 
@@ -50,19 +54,25 @@ Your support helps keep the project going and will earn you some serious virtual
 
 ## Table of Contents 
 
-- [**🚧 Project Under Development 🚧**](#-project-under-development-)
-    - [Documentation Coming Soon (1/24/23)](#documentation-coming-soon-12423)
-  - [Overview](#overview)
-    - [Features include:](#features-include)
-  - [Donate](#donate)
-  - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Quick Start](#quick-start)
-  - [TypeScript](#typescript)
-  - [Icon Attribution](#icon-attribution)
-  - [Contributing](#contributing)
-  - [⭐ Found It Helpful? Star It!](#-found-it-helpful-star-it)
-  - [License](#license)
+- [Documentation](#documentation)
+- [Overview](#overview)
+  - [Features include:](#features-include)
+- [Donate](#donate)
+- [Table of Contents](#table-of-contents)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+    - [Basic Usage](#basic-usage)
+    - [Providing A Default Value](#providing-a-default-value)
+    - [Namespacing Using Prefix](#namespacing-using-prefix)
+      - [Namespacing Using User IDs](#namespacing-using-user-ids)
+    - [Clearing The Value](#clearing-the-value)
+    - [Accessing The Prefixed Key](#accessing-the-prefixed-key)
+    - [Additional Options \& Uses](#additional-options--uses)
+- [TypeScript](#typescript)
+- [Icon Attribution](#icon-attribution)
+- [Contributing](#contributing)
+- [⭐ Found It Helpful? Star It!](#-found-it-helpful-star-it)
+- [License](#license)
 
 ## Installation
 
@@ -72,15 +82,96 @@ npm i react-storage-complete
 
 ## Quick Start
 
-This section will contain a copy/paste example so people can get started quickly.
+| Use this hook...    | For this Storage API... | Storage Description                                                                                                                                      |
+| ------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `useLocalStorage`   | `localStorage`          | The `localStorage` object stores data with no expiration date. The data is not deleted when the browser is closed, and is available for future sessions. |
+| `useSessionStorage` | `sessionStorage`        | The `sessionStorage` object stores data for only one session. The data is deleted when the browser is closed.                                            |
+
+#### Basic Usage
 
 ```jsx
-import { Example } from 'react-storage-complete';
+import { useLocalStorage } from 'react-storage-complete';
+import { useSessionStorage } from 'react-storage-complete';
 ```
 
+> Both `useLocalStorage` and `useSessionStorage` share the same interface and are interchangeable.
+
+In your component or hook:
+
 ```jsx
-<Example label="Example Component" />
+const [name, setName] = useLocalStorage('name');
 ```
+
+This will store values using the `name` key in `localStorage`. 
+
+> Note: If using TypeScript, you can provide a value type like so: `useLocalStorage<string>('name')`.
+
+#### Providing A Default Value
+
+You can also provide a default value for when the stored value is `undefined` (not currently set in `localStorage`):
+
+```jsx
+const [name, setName] = useLocalStorage('name', 'Guest');
+```
+
+#### Namespacing Using Prefix
+
+You can namespace stored items using a prefix:
+
+```jsx
+const [name, setName] = useLocalStorage('name', 'Guest', {
+  prefix: 'my-namespace',
+});
+```
+
+This is useful for compartmentalizing local settings for multiple purposes. For example, by using a user ID as the prefix, you can scope the stored data to the user and avoid mixing settings.
+
+
+##### Namespacing Using User IDs
+
+With `react-storage-complete`, managing stored data for multiple user accounts in the same browser is easy.
+
+```jsx
+const [name, setName, initialized, clear, prefixedKey] = useLocalStorage('name', 'Guest', {
+  shouldInitialize: user && typeof user.id === 'string',
+  prefix: user ? user.id : undefined,
+});
+```
+
+As shown above, you can delay initialization of the stored value until your prefix is available and ready to use as the namespace. For example, a user ID may not be ready until logged in, but you may still be calling the hook in your app before that happens.
+
+In this case, `initialized` will be `false` until the `user.id` is loaded and ready to use as the prefix and the value has been retrieved from `localStorage`, at which time `initialized` will then be `true` and your value will be ready.
+
+#### Clearing The Value
+
+```jsx
+const [name, setName, initialized, clear, prefixedKey] = useLocalStorage('name', 'Guest', {
+  prefix: 'my-namespace',
+});
+```
+
+You can clear any stored value and completely remove it from storage using the returned clear function. 
+
+In this example, calling `clear()` will delete the item from storage. You can also call `setName(undefined)` to achieve the same result.
+
+#### Accessing The Prefixed Key
+
+```jsx
+const [food, setFood, initialized, clear, prefixedKey] = useLocalStorage('food', 'Hamburger', {
+  prefix: 'my-namespace',
+});
+```
+
+The hook also returns the prefixed key, in case you want direct access to it. 
+
+In the example above, the prefixed key would be `my-namespace.food`.
+
+#### Additional Options & Uses
+
+See the documentation for additional options and uses:
+
+- [useLocalStorage documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--page)
+- [useSessionStorage documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-usesessionstorage--page)
 
 [lock:typescript]::🚫---------------------------------------
 
