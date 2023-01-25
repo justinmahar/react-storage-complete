@@ -52,47 +52,6 @@ const LocalStorageExample = (_a) => {
     }, storageOptions);
     const [storedAny, setStoredAny, storedAnyInitialized, clearStoredAny, storedAnyPrefixedStorageKey] = useStorage('stored-any', undefined, storageOptions);
     return (react_1.default.createElement("div", { className: "d-flex flex-column gap-1" },
-        react_1.default.createElement(react_bootstrap_1.Card, null,
-            react_1.default.createElement(react_bootstrap_1.Card.Header, null,
-                react_1.default.createElement(react_bootstrap_1.Form.Check, { inline: true, label: "Use Prefix", id: "prefix-checkbox", checked: prefixEnabled, onChange: (e) => setPrefixEnabled(e.target.checked) })),
-            react_1.default.createElement(react_bootstrap_1.Card.Body, { className: "d-flex flex-column gap-1" },
-                react_1.default.createElement(react_bootstrap_1.Form.Group, { controlId: "prefix-group" },
-                    react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "text", placeholder: "Enter a prefix", value: prefix, onChange: (e) => setPrefix(e.target.value) })),
-                react_1.default.createElement("div", { className: "d-flex flex-wrap gap-1" },
-                    react_1.default.createElement(react_bootstrap_1.Button, { variant: "outline-primary", size: "sm", onClick: () => {
-                            setPrefix('abc-123-hank');
-                            setPrefixEnabled(true);
-                        } }, "Hank's Account ID"),
-                    react_1.default.createElement(react_bootstrap_1.Button, { variant: "outline-primary", size: "sm", onClick: () => {
-                            setPrefix('def-456-frank');
-                            setPrefixEnabled(true);
-                        } }, "Frank's Account ID"),
-                    react_1.default.createElement(react_bootstrap_1.Button, { variant: "outline-primary", size: "sm", onClick: () => {
-                            setPrefix('xyz-987-tony');
-                            setPrefixEnabled(true);
-                        } }, "Tony's Account ID"),
-                    react_1.default.createElement(react_bootstrap_1.Button, { variant: "outline-primary", size: "sm", onClick: () => {
-                            setPrefix('');
-                            setPrefixEnabled(true);
-                        } }, "Empty Prefix")),
-                react_1.default.createElement("div", null,
-                    react_1.default.createElement(react_bootstrap_1.Form.Label, null, "Prefix Separator"),
-                    react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "text", placeholder: "Prefix key separator", value: prefixSeparator, onChange: (e) => setPrefixSeparator(e.target.value) }),
-                    react_1.default.createElement(react_bootstrap_1.Form.Text, { className: "text-muted" },
-                        "This separates the prefix from the key. For example, if the separator is ",
-                        react_1.default.createElement("code", null, "."),
-                        ", the prefixed key is ",
-                        react_1.default.createElement("code", null, "user-id.keyname"),
-                        ".")))),
-        react_1.default.createElement(react_bootstrap_1.ListGroup, null,
-            react_1.default.createElement(react_bootstrap_1.ListGroup.Item, { className: "bg-light" },
-                react_1.default.createElement("div", { className: "d-flex flex-column" },
-                    react_1.default.createElement(react_bootstrap_1.Form.Check, { inline: true, label: "Should Initialize", id: "should-init-checkbox", checked: shouldInitialize, onChange: (e) => setShouldInitialize(e.target.checked) }),
-                    react_1.default.createElement(react_bootstrap_1.Form.Text, { className: "text-muted" }, "This is useful when your prefix string must be loaded after rendering. For example, you can postpone initializing local storage values until a user is logged in and their ID is available to use as the prefix."))),
-            react_1.default.createElement(react_bootstrap_1.ListGroup.Item, { className: "bg-light" },
-                react_1.default.createElement("div", { className: "d-flex flex-column" },
-                    react_1.default.createElement(react_bootstrap_1.Form.Check, { inline: true, label: "Should Initialize", id: "should-init-checkbox", checked: shouldInitialize, onChange: (e) => setShouldInitialize(e.target.checked) }),
-                    react_1.default.createElement(react_bootstrap_1.Form.Text, { className: "text-muted" }, "This is useful when your prefix string must be loaded after rendering. For example, you can postpone initializing local storage values until a user is logged in and their ID is available to use as the prefix.")))),
         react_1.default.createElement("div", null,
             !storedStringInitialized && (react_1.default.createElement("div", null,
                 react_1.default.createElement(react_bootstrap_1.Spinner, { animation: "border", role: "status", size: "sm" }),
@@ -138,7 +97,7 @@ const LocalStorageExample = (_a) => {
                                 "Key: ",
                                 storedBooleanPrefixedStorageKey)),
                         react_1.default.createElement("div", { className: "d-flex gap-1" },
-                            react_1.default.createElement(react_bootstrap_1.Form.Check, { label: "Stored boolean type", id: "stored-bool-id", checked: !!storedBoolean, onChange: (e) => setStoredBoolean(e.target.checked) }),
+                            react_1.default.createElement(react_bootstrap_1.Form.Check, { label: "Stored boolean type", className: "user-select-none", id: "stored-bool-id", checked: !!storedBoolean, onChange: (e) => setStoredBoolean(e.target.checked) }),
                             react_1.default.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: () => clearStoredBoolean() }, "Clear/Reset")),
                         react_1.default.createElement(react_bootstrap_1.Form.Text, { className: "text-muted" },
                             "Value: ",
@@ -153,7 +112,7 @@ const LocalStorageExample = (_a) => {
                         react_1.default.createElement("div", { className: "d-flex gap-1" },
                             react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "text", placeholder: "object.str string value", value: (_b = storedObject === null || storedObject === void 0 ? void 0 : storedObject.str) !== null && _b !== void 0 ? _b : '', onChange: (e) => setStoredObject(Object.assign(Object.assign({}, storedObject), { str: e.target.value })) }),
                             react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "number", placeholder: "object.num number value", value: (_c = storedObject === null || storedObject === void 0 ? void 0 : storedObject.num) !== null && _c !== void 0 ? _c : '', onChange: (e) => setStoredObject(Object.assign(Object.assign({}, storedObject), { num: Number.parseInt(e.target.value) })) }),
-                            react_1.default.createElement(react_bootstrap_1.Form.Check, { label: "object.bool value", id: "stored-object-bool-id", checked: !!(storedObject === null || storedObject === void 0 ? void 0 : storedObject.bool), onChange: (e) => setStoredObject(Object.assign(Object.assign({}, storedObject), { bool: e.target.checked })) }),
+                            react_1.default.createElement(react_bootstrap_1.Form.Check, { label: "object.bool value", className: "user-select-none", id: "stored-object-bool-id", checked: !!(storedObject === null || storedObject === void 0 ? void 0 : storedObject.bool), onChange: (e) => setStoredObject(Object.assign(Object.assign({}, storedObject), { bool: e.target.checked })) }),
                             react_1.default.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: () => clearStoredBoolean() }, "Clear/Reset")),
                         react_1.default.createElement(react_bootstrap_1.Form.Text, { className: "text-muted" },
                             "Value: ",
@@ -170,6 +129,53 @@ const LocalStorageExample = (_a) => {
                             react_1.default.createElement(react_bootstrap_1.Button, { variant: "primary", onClick: () => clearStoredAny() }, "Clear/Reset")),
                         react_1.default.createElement(react_bootstrap_1.Form.Text, { className: "text-muted" },
                             "Value: ",
-                            storedAny))))))));
+                            storedAny)))))),
+        react_1.default.createElement(react_bootstrap_1.Card, null,
+            react_1.default.createElement(react_bootstrap_1.Card.Header, null,
+                react_1.default.createElement("div", { className: "d-flex flex-column" },
+                    react_1.default.createElement(react_bootstrap_1.Form.Check, { inline: true, label: "Use Prefix", className: "user-select-none", id: "prefix-checkbox", checked: prefixEnabled, onChange: (e) => setPrefixEnabled(e.target.checked) }),
+                    react_1.default.createElement(react_bootstrap_1.Form.Text, { className: "text-muted" }, "A prefix allows you to scope storage to a namespace of your choosing. For example, you may want to store and retrieve settings for multiple authenticated users in the same browser. In that case, you can prefix the keys with the user's ID. A few examples are shown below. Try selecting different accounts below and changing the stored values."))),
+            react_1.default.createElement(react_bootstrap_1.Card.Body, { className: "d-flex flex-column gap-1" },
+                react_1.default.createElement(react_bootstrap_1.Form.Group, { controlId: "prefix-group" },
+                    react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "text", placeholder: "Enter a prefix", value: prefix, onChange: (e) => setPrefix(e.target.value) })),
+                react_1.default.createElement("div", { className: "d-flex flex-wrap gap-1" },
+                    react_1.default.createElement(react_bootstrap_1.Button, { variant: "outline-primary", size: "sm", onClick: () => {
+                            setPrefix('abc-123-hank');
+                            setPrefixEnabled(true);
+                        } }, "Hank's Account ID"),
+                    react_1.default.createElement(react_bootstrap_1.Button, { variant: "outline-primary", size: "sm", onClick: () => {
+                            setPrefix('def-456-frank');
+                            setPrefixEnabled(true);
+                        } }, "Frank's Account ID"),
+                    react_1.default.createElement(react_bootstrap_1.Button, { variant: "outline-primary", size: "sm", onClick: () => {
+                            setPrefix('xyz-987-tony');
+                            setPrefixEnabled(true);
+                        } }, "Tony's Account ID"),
+                    react_1.default.createElement(react_bootstrap_1.Button, { variant: "outline-primary", size: "sm", onClick: () => {
+                            setPrefix('');
+                            setPrefixEnabled(true);
+                        } }, "Empty Prefix")),
+                react_1.default.createElement("div", null,
+                    react_1.default.createElement(react_bootstrap_1.Form.Label, null, "Prefix Separator"),
+                    react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "text", placeholder: "Prefix key separator", value: prefixSeparator, onChange: (e) => setPrefixSeparator(e.target.value) }),
+                    react_1.default.createElement(react_bootstrap_1.Form.Text, { className: "text-muted" },
+                        "This separates the prefix from the key. For example, if the separator is ",
+                        react_1.default.createElement("code", null, "."),
+                        ", the prefixed key is ",
+                        react_1.default.createElement("code", null, "prefix.keyname"),
+                        ".")))),
+        react_1.default.createElement(react_bootstrap_1.ListGroup, null,
+            react_1.default.createElement(react_bootstrap_1.ListGroup.Item, { className: "bg-light" },
+                react_1.default.createElement("div", { className: "d-flex flex-column" },
+                    react_1.default.createElement(react_bootstrap_1.Form.Check, { inline: true, label: "Should Initialize", className: "user-select-none", id: "should-init-checkbox", checked: shouldInitialize, onChange: (e) => setShouldInitialize(e.target.checked) }),
+                    react_1.default.createElement(react_bootstrap_1.Form.Text, { className: "text-muted" }, "This is useful when your prefix string must be loaded after rendering. For example, you can postpone initializing local storage values until a user is logged in and their ID is available to use as the prefix."))),
+            react_1.default.createElement(react_bootstrap_1.ListGroup.Item, { className: "bg-light" },
+                react_1.default.createElement("div", { className: "d-flex flex-column" },
+                    react_1.default.createElement(react_bootstrap_1.Form.Check, { inline: true, label: "Disable Emitter Listener", className: "user-select-none", id: "disable-emitter-checkbox", checked: emitterListenerDisabled, onChange: (e) => setEmitterListenerDisabled(e.target.checked) }),
+                    react_1.default.createElement(react_bootstrap_1.Form.Text, { className: "text-muted" }, "The hook will synchronize changes with hooks using the same key in other components via an emitter. You can disable this feature if you'd like. To test this, you can see the \"Second hook value\" below update when the stored string changes, and it will no longer update when the Emitter Listener is disabled."))),
+            react_1.default.createElement(react_bootstrap_1.ListGroup.Item, { className: "bg-light" },
+                react_1.default.createElement("div", { className: "d-flex flex-column" },
+                    react_1.default.createElement(react_bootstrap_1.Form.Check, { inline: true, label: "Disable Storage Event Listener", className: "user-select-none", id: "disable-storage-event-listener-checkbox", checked: storageEventListenerDisabled, onChange: (e) => setStorageEventListenerDisabled(e.target.checked) }),
+                    react_1.default.createElement(react_bootstrap_1.Form.Text, { className: "text-muted" }, "The hook will synchronize storage changes made in other tabs via the Window Storage Event API. You can disable this feature if you'd like. To test this, you can see any of the values below update when making changes in another tab, and they will no longer update when the Storage Event Listener is disabled."))))));
 };
 exports.LocalStorageExample = LocalStorageExample;
