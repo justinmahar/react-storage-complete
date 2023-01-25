@@ -16,7 +16,7 @@ exports.DEFAULT_BROWSER_STORAGE_OPTIONS = {
     encode: defaultEncode,
     decode: defaultDecode,
 };
-function useBrowserStorage(key, defaultWhenNull, storage, options = exports.DEFAULT_BROWSER_STORAGE_OPTIONS) {
+function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports.DEFAULT_BROWSER_STORAGE_OPTIONS) {
     const opts = react_1.default.useMemo(() => {
         return Object.assign(Object.assign({}, exports.DEFAULT_BROWSER_STORAGE_OPTIONS), options);
     }, [
@@ -28,18 +28,17 @@ function useBrowserStorage(key, defaultWhenNull, storage, options = exports.DEFA
     ]); // Don't include `options` or the encoders, they may change on every render
     const [initialized, setInitialized] = react_1.default.useState(!!opts.shouldInitialize);
     const scopedStorageKey = react_1.default.useMemo(() => `${opts.prefix ? `${opts.prefix}${opts.prefixSeparator}` : ''}${key}`, [key, opts.prefix, opts.prefixSeparator]);
-    const defaultValue = react_1.default.useMemo(() => defaultWhenNull, []); // Don't include defaultWhenNull, it may change on every render
+    const defaultValue = react_1.default.useMemo(() => defaultWhenUndefined, []); // Don't include defaultWhenUndefined, it may change on every render
     const getDecodedValue = react_1.default.useCallback(() => {
-        var _a;
         let val = defaultValue;
-        try {
-            val =
-                opts.shouldInitialize && typeof storage !== 'undefined' && opts.decode
-                    ? (_a = opts.decode(storage[scopedStorageKey])) !== null && _a !== void 0 ? _a : defaultValue
-                    : defaultValue;
-        }
-        catch (e) {
-            console.error('Error while decoding stored value for key:', scopedStorageKey, 'Error:', e, 'Value was:', storage[scopedStorageKey], 'This value could not be decoded properly. Try 1) checking the value, 2) checking your decoder, or 3) if using the default decoder (which uses JSON.parse), try specifying your own.');
+        if (opts.shouldInitialize && typeof storage !== 'undefined' && opts.decode) {
+            try {
+                const storedRawVal = storage[scopedStorageKey];
+                val = typeof storedRawVal === 'undefined' ? defaultValue : opts.decode(storedRawVal);
+            }
+            catch (e) {
+                console.error('Error while decoding stored value for key:', scopedStorageKey, 'Error:', e, 'Value was:', storage[scopedStorageKey], 'This value could not be decoded properly. Try 1) checking the value, 2) checking your decoder, or 3) if using the default decoder (which uses JSON.parse), try specifying your own.');
+            }
         }
         return val;
     }, [defaultValue, opts, scopedStorageKey, storage]);

@@ -15,7 +15,9 @@
 
 Read the **[official documentation](https://justinmahar.github.io/react-storage-complete/)**.
 
-#### Project Under Development
+# **🚧 Project Under Development 🚧**
+
+### Documentation Coming Soon
 
 ## Overview
 
@@ -48,19 +50,19 @@ Your support helps keep the project going and will earn you some serious virtual
 
 ## Table of Contents 
 
-- [Documentation](#documentation)
-    - [Project Under Development](#project-under-development)
-- [Overview](#overview)
-  - [Features include:](#features-include)
-- [Donate](#donate)
-- [Table of Contents](#table-of-contents)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [TypeScript](#typescript)
-- [Icon Attribution](#icon-attribution)
-- [Contributing](#contributing)
-- [⭐ Found It Helpful? Star It!](#-found-it-helpful-star-it)
-- [License](#license)
+- [**🚧 Project Under Development 🚧**](#-project-under-development-)
+    - [Documentation Coming Soon](#documentation-coming-soon)
+  - [Overview](#overview)
+    - [Features include:](#features-include)
+  - [Donate](#donate)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Quick Start](#quick-start)
+  - [TypeScript](#typescript)
+  - [Icon Attribution](#icon-attribution)
+  - [Contributing](#contributing)
+  - [⭐ Found It Helpful? Star It!](#-found-it-helpful-star-it)
+  - [License](#license)
 
 ## Installation
 

@@ -22,11 +22,11 @@ export const DEFAULT_BROWSER_STORAGE_OPTIONS: BrowserStorageOptions<any> = {
   decode: defaultDecode,
 };
 
-export type StorageState<T> = [T | null, (val: T | null | undefined) => void, boolean, () => void, string];
+export type StorageState<T> = [T | null | undefined, (val: T | null | undefined) => void, boolean, () => void, string];
 
 export function useBrowserStorage<T = any>(
   key: string,
-  defaultWhenNull: T | null,
+  defaultWhenUndefined: T | null | undefined,
   storage: Storage,
   options: BrowserStorageOptions<T> = DEFAULT_BROWSER_STORAGE_OPTIONS,
 ): StorageState<T> {
@@ -46,25 +46,25 @@ export function useBrowserStorage<T = any>(
     [key, opts.prefix, opts.prefixSeparator],
   );
 
-  const defaultValue = React.useMemo(() => defaultWhenNull, []); // Don't include defaultWhenNull, it may change on every render
+  const defaultValue = React.useMemo(() => defaultWhenUndefined, []); // Don't include defaultWhenUndefined, it may change on every render
 
   const getDecodedValue = React.useCallback(() => {
     let val = defaultValue;
-    try {
-      val =
-        opts.shouldInitialize && typeof storage !== 'undefined' && opts.decode
-          ? opts.decode(storage[scopedStorageKey]) ?? defaultValue
-          : defaultValue;
-    } catch (e) {
-      console.error(
-        'Error while decoding stored value for key:',
-        scopedStorageKey,
-        'Error:',
-        e,
-        'Value was:',
-        storage[scopedStorageKey],
-        'This value could not be decoded properly. Try 1) checking the value, 2) checking your decoder, or 3) if using the default decoder (which uses JSON.parse), try specifying your own.',
-      );
+    if (opts.shouldInitialize && typeof storage !== 'undefined' && opts.decode) {
+      try {
+        const storedRawVal = storage[scopedStorageKey];
+        val = typeof storedRawVal === 'undefined' ? defaultValue : opts.decode(storedRawVal);
+      } catch (e) {
+        console.error(
+          'Error while decoding stored value for key:',
+          scopedStorageKey,
+          'Error:',
+          e,
+          'Value was:',
+          storage[scopedStorageKey],
+          'This value could not be decoded properly. Try 1) checking the value, 2) checking your decoder, or 3) if using the default decoder (which uses JSON.parse), try specifying your own.',
+        );
+      }
     }
     return val;
   }, [defaultValue, opts, scopedStorageKey, storage]);
