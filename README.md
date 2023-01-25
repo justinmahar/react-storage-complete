@@ -15,6 +15,8 @@
 
 Read the **[official documentation](https://justinmahar.github.io/react-storage-complete/)**.
 
+[**👁️ Live Demo**](https://justinmahar.github.io/react-storage-complete/?path=/story/stories-web-storage--local-storage)
+
 ## Overview
 
 Hooks for easily accessing `localStorage` and `sessionStorage`, with a similar interface to `React.useState()`.
@@ -102,7 +104,7 @@ In your component or hook:
 const [name, setName] = useLocalStorage('name');
 ```
 
-This will store values using the `name` key in `localStorage`. 
+This will store and retrieve the value using the `name` key in `localStorage`. 
 
 > Note: If using TypeScript, you can provide a value type like so: `useLocalStorage<string>('name')`.
 
@@ -114,6 +116,10 @@ You can also provide a default value for when the stored value is `undefined` (n
 const [name, setName] = useLocalStorage('name', 'Guest');
 ```
 
+In this example, when the stored item with the key `name` is `undefined`, the `name` value will be `Guest`. 
+
+> Note: When a value is `null` in storage, `null` is returned, not the provided default.
+
 #### Namespacing Using Prefix
 
 You can namespace stored items using a prefix:
@@ -124,8 +130,7 @@ const [name, setName] = useLocalStorage('name', 'Guest', {
 });
 ```
 
-This is useful for compartmentalizing local settings for multiple purposes. For example, by using a user ID as the prefix, you can scope the stored data to the user and avoid mixing settings.
-
+For example, by using a user ID as the prefix, you can scope the stored data to the user and avoid mixing settings.
 
 ##### Namespacing Using User IDs
 
@@ -133,16 +138,19 @@ With `react-storage-complete`, managing stored data for multiple user accounts i
 
 ```jsx
 const [name, setName, initialized] = useLocalStorage('name', 'Guest', {
-  prefix: user?.id, // Undefined until user ID is available
+  prefix: user?.id, // Undefined until user ID is available as a namespace
   shouldInitialize: !!user?.id, // Only initialize when user ID is available
 });
 ```
 
-As shown above, you can delay initialization of the stored value until your prefix is available and ready to use as the namespace. For example, a user ID may not be ready until logged in, but you may still be calling the hook in your app before that happens.
+As shown above, you can delay initialization of the stored value until your prefix is available and ready to use as the namespace. 
 
-In this case:
+For example, a user ID may not be ready until logged in, but you may still be calling the hook in your app before that happens.
+
+In this example:
 - `initialized` will be `false` until the `user.id` is loaded and ready to use as the prefix.
-- When `shouldInitialize` is `true`, the stored value is retrieved from `localStorage`. Then, `initialized` will return as `true`, and your value will be ready to use!
+- When `shouldInitialize` is `true`, the prefix is used with the key to retrieve the stored value from `localStorage`. 
+- Then, `initialized` will return as `true`, and your value will be ready to use!
 
 #### Clearing The Value
 
