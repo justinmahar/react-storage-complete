@@ -19,7 +19,7 @@ export const LocalStorageExample = ({ useStorage, ...props }: LocalStorageExampl
   const [prefixEnabled, setPrefixEnabled] = React.useState(false);
   const [prefixSeparator, setPrefixSeparator] = React.useState('.');
   const [shouldInitialize, setShouldInitialize] = React.useState(true);
-  const [emitterListenerDisabled, setEmitterListenerDisabled] = React.useState(false);
+  const [emitterDisabled, setEmitterDisabled] = React.useState(false);
   const [storageEventListenerDisabled, setStorageEventListenerDisabled] = React.useState(false);
 
   const storageOptions = React.useMemo(() => {
@@ -28,11 +28,11 @@ export const LocalStorageExample = ({ useStorage, ...props }: LocalStorageExampl
       options.prefix = prefix;
     }
     options.prefixSeparator = prefixSeparator;
-    options.emitterListenerDisabled = emitterListenerDisabled;
+    options.emitterDisabled = emitterDisabled;
     options.storageEventListenerDisabled = storageEventListenerDisabled;
     options.shouldInitialize = shouldInitialize;
     return options;
-  }, [emitterListenerDisabled, prefix, prefixEnabled, prefixSeparator, shouldInitialize, storageEventListenerDisabled]);
+  }, [emitterDisabled, prefix, prefixEnabled, prefixSeparator, shouldInitialize, storageEventListenerDisabled]);
 
   const [storedString, setStoredString, storedStringInitialized, clearStoredString, storedStringPrefixedStorageKey] =
     useStorage<string>('stored-string', undefined, storageOptions);
@@ -190,7 +190,7 @@ export const LocalStorageExample = ({ useStorage, ...props }: LocalStorageExampl
           <div className="d-flex flex-column">
             <Form.Check
               inline
-              label="Use Prefix"
+              label="Use Prefix (For Namespacing)"
               className="user-select-none"
               id="prefix-checkbox"
               checked={prefixEnabled}
@@ -199,8 +199,8 @@ export const LocalStorageExample = ({ useStorage, ...props }: LocalStorageExampl
             <Form.Text className="text-muted">
               A prefix allows you to scope storage to a namespace of your choosing. For example, you may want to store
               and retrieve settings for multiple authenticated users in the same browser. In that case, you can prefix
-              the keys with the user's ID. A few examples are shown below. Try selecting different accounts below and
-              changing the stored values.
+              the keys with the user's ID to separate their settings from everyone else. A few examples are shown below.
+              Try selecting different accounts below and changing the stored values.
             </Form.Text>
           </div>
         </Card.Header>
@@ -292,16 +292,16 @@ export const LocalStorageExample = ({ useStorage, ...props }: LocalStorageExampl
           <div className="d-flex flex-column">
             <Form.Check
               inline
-              label="Disable Emitter Listener"
+              label="Disable Emitter"
               className="user-select-none"
               id="disable-emitter-checkbox"
-              checked={emitterListenerDisabled}
-              onChange={(e) => setEmitterListenerDisabled(e.target.checked)}
+              checked={emitterDisabled}
+              onChange={(e) => setEmitterDisabled(e.target.checked)}
             />
             <Form.Text className="text-muted">
               The hook will synchronize changes with hooks using the same key in other components via an emitter. You
-              can disable this feature if you'd like. To test this, you can see the "Second hook value" below update
-              when the stored string changes, and it will no longer update when the Emitter Listener is disabled.
+              can disable this feature if you'd like. To test this, you can see the "Second hook value" above update
+              when the stored string changes, and it will no longer update when the emitter is disabled.
             </Form.Text>
           </div>
         </ListGroup.Item>
@@ -317,7 +317,7 @@ export const LocalStorageExample = ({ useStorage, ...props }: LocalStorageExampl
             />
             <Form.Text className="text-muted">
               The hook will synchronize storage changes made in other tabs via the Window Storage Event API. You can
-              disable this feature if you'd like. To test this, you can see any of the values below update when making
+              disable this feature if you'd like. To test this, you can see any of the values above update when making
               changes in another tab, and they will no longer update when the Storage Event Listener is disabled.
             </Form.Text>
           </div>

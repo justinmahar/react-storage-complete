@@ -17,7 +17,7 @@ Read the **[official documentation](https://justinmahar.github.io/react-storage-
 
 # **🚧 Project Under Development 🚧**
 
-### Documentation Coming Soon
+### Documentation Coming Soon (1/24/23)
 
 ## Overview
 
@@ -51,7 +51,7 @@ Your support helps keep the project going and will earn you some serious virtual
 ## Table of Contents 
 
 - [**🚧 Project Under Development 🚧**](#-project-under-development-)
-    - [Documentation Coming Soon](#documentation-coming-soon)
+    - [Documentation Coming Soon (1/24/23)](#documentation-coming-soon-12423)
   - [Overview](#overview)
     - [Features include:](#features-include)
   - [Donate](#donate)
