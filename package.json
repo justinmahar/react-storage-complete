@@ -30,6 +30,7 @@
     "react",
     "api",
     "browser",
+    "data",
     "decode",
     "encode",
     "hook",
@@ -46,6 +47,7 @@
     "sessionStorage",
     "state",
     "storage",
+    "store",
     "sync",
     "synchronize",
     "web"
