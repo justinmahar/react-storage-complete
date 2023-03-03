@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useLocalStorage = void 0;
+const react_1 = __importDefault(require("react"));
 const useBrowserStorage_1 = require("./useBrowserStorage");
 /**
  * Access a `localStorage` item. Use this in a similar fashion to `React.useState()`.
@@ -23,6 +27,7 @@ const useBrowserStorage_1 = require("./useBrowserStorage");
  * @returns The storage state. See the [documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--page#return) for details.
  */
 function useLocalStorage(key, defaultWhenUndefined = undefined, options = useBrowserStorage_1.DEFAULT_BROWSER_STORAGE_OPTIONS) {
-    return (0, useBrowserStorage_1.useBrowserStorage)(key, defaultWhenUndefined, localStorage, options);
+    const storage = react_1.default.useMemo(() => (typeof localStorage !== 'undefined' ? localStorage : {}), []);
+    return (0, useBrowserStorage_1.useBrowserStorage)(key, defaultWhenUndefined, storage, options);
 }
 exports.useLocalStorage = useLocalStorage;

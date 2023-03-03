@@ -11,7 +11,7 @@ export interface StorageOptions<T> {
 }
 export declare const DEFAULT_BROWSER_STORAGE_OPTIONS: StorageOptions<any>;
 export type StorageState<T> = [T | null | undefined, (val: T | null | undefined) => void, boolean, () => void, string];
-export declare function useBrowserStorage<T = any>(key: string, defaultWhenUndefined: T | null | undefined, storage: Storage, options?: StorageOptions<T>): StorageState<T>;
+export declare function useBrowserStorage<T = any>(key: string, defaultWhenUndefined: T | null | undefined, storage?: Storage, options?: StorageOptions<T>): StorageState<T>;
 export type StorageEncoder<T> = (value: T | null) => string | null;
 export type StorageDecoder<T> = (itemString: string | null) => T | null;
 export declare function defaultEncode<T>(value: T | null): string | null;
