@@ -27,7 +27,7 @@ export type StorageState<T> = [T | null | undefined, (val: T | null | undefined)
 export function useBrowserStorage<T = any>(
   key: string,
   defaultWhenUndefined: T | null | undefined,
-  storage: Storage,
+  storage?: Storage,
   options: StorageOptions<T> = DEFAULT_BROWSER_STORAGE_OPTIONS,
 ): StorageState<T> {
   const opts = React.useMemo(() => {

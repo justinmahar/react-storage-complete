@@ -1,3 +1,4 @@
+import React from 'react';
 import { DEFAULT_BROWSER_STORAGE_OPTIONS, StorageOptions, StorageState, useBrowserStorage } from './useBrowserStorage';
 
 /**
@@ -25,5 +26,6 @@ export function useSessionStorage<T = any>(
   defaultWhenUndefined: T | null | undefined = undefined,
   options: StorageOptions<T> = DEFAULT_BROWSER_STORAGE_OPTIONS,
 ): StorageState<T> {
-  return useBrowserStorage<T>(key, defaultWhenUndefined, sessionStorage, options);
+  const storage = React.useMemo(() => (typeof sessionStorage !== 'undefined' ? sessionStorage : ({} as Storage)), []);
+  return useBrowserStorage<T>(key, defaultWhenUndefined, storage, options);
 }
