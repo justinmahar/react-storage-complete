@@ -130,31 +130,36 @@ export function useBrowserStorage<T = any>(
       if (opts.shouldInitialize) {
         try {
           if (opts.encode && opts.decode && typeof value !== 'undefined') {
-            const encoded = opts.encode(value);
-            try {
-              // Ensure we can decode it, too
-              opts.decode(encoded);
-              setState(value);
-              storage[scopedStorageKey] = encoded;
-              if (!opts.emitterDisabled) {
-                storageEventEmitter.emit(EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage, hookUuid.current);
+            const encodedState = state ? opts.encode(state) : undefined;
+            const encodedValue = opts.encode(value);
+            const isValueDifferent = encodedState !== encodedValue;
+            // Only set the state if the encoded value is different.
+            if (isValueDifferent) {
+              try {
+                // Ensure we can decode it, too
+                opts.decode(encodedValue);
+                setState(value);
+                storage[scopedStorageKey] = encodedValue;
+                if (!opts.emitterDisabled) {
+                  storageEventEmitter.emit(EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage, hookUuid.current);
+                }
+              } catch (e) {
+                console.error(
+                  'Error while testing decoding during set operation:',
+                  scopedStorageKey,
+                  'Error:',
+                  e,
+                  'Value was:',
+                  value,
+                  'Could not decode after encoded as:',
+                  encodedValue,
+                  'This value could not be decoded properly. Try 1) checking the value, 2) checking your decoder, or 3) if using the default decoder (which uses JSON.parse), try specifying your own.',
+                );
               }
-            } catch (e) {
-              console.error(
-                'Error while testing decoding during set operation:',
-                scopedStorageKey,
-                'Error:',
-                e,
-                'Value was:',
-                value,
-                'Could not decode after encoded as:',
-                encoded,
-                'This value could not be decoded properly. Try 1) checking the value, 2) checking your decoder, or 3) if using the default decoder (which uses JSON.parse), try specifying your own.',
-              );
             }
           }
-          if (typeof value === 'undefined') {
-            setState(null);
+          if (typeof value === 'undefined' && typeof state !== 'undefined') {
+            setState(undefined);
             delete storage[scopedStorageKey];
             if (!opts.emitterDisabled) {
               storageEventEmitter.emit(EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage, hookUuid.current);
@@ -173,7 +178,7 @@ export function useBrowserStorage<T = any>(
         }
       }
     },
-    [opts, scopedStorageKey, storage],
+    [opts, scopedStorageKey, state, storage],
   );
 
   const clear = React.useCallback(() => {
@@ -187,11 +192,11 @@ export type StorageEncoder<T> = (value: T | null) => string | null;
 export type StorageDecoder<T> = (itemString: string | null) => T | null;
 
 export function defaultEncode<T>(value: T | null): string | null {
-  return value !== null && typeof value !== 'undefined' ? JSON.stringify(value) : null;
+  return value !== null ? JSON.stringify(value) : null;
 }
 
 export function defaultDecode<T>(itemString: string | null): T | null {
-  return itemString !== null && typeof itemString !== 'undefined' ? JSON.parse(itemString) : null;
+  return itemString !== null ? JSON.parse(itemString) : null;
 }
 
 export const EMITTER_CHANGE_EVENT_NAME = 'change';

@@ -151,11 +151,11 @@ Here are the ones used in this hook by default, as a starting point:
 
 ```tsx
 export function defaultEncode<T>(value: T | null): string | null {
-  return value !== null && typeof value !== 'undefined' ? JSON.stringify(value) : null;
+  return value !== null ? JSON.stringify(value) : null;
 }
 
 export function defaultDecode<T>(itemString: string | null): T | null {
-  return itemString !== null && typeof itemString !== 'undefined' ? JSON.parse(itemString) : null;
+  return itemString !== null ? JSON.parse(itemString) : null;
 }
 ```
 
