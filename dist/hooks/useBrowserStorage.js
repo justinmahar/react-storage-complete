@@ -44,15 +44,22 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
         return val;
     }, [defaultValue, opts, scopedStorageKey, storage]);
     const [state, setState] = react_1.default.useState(getDecodedValue());
-    // If the scope, key, storage, or options, change, decode and set the value, and set it as initialized.
+    // If the scope, key, storage, or opts.shouldInitialize change, decode and set the value, and set it as initialized.
     react_1.default.useEffect(() => {
+        const currentEncodedState = state && opts.encode ? opts.encode(state) : undefined;
         if (opts.shouldInitialize) {
-            setState(getDecodedValue());
+            const newEncodedValue = storage[scopedStorageKey];
+            if (currentEncodedState !== newEncodedValue) {
+                setState(getDecodedValue());
+            }
             setInitialized(true);
         }
         else {
+            const newEncodedValue = defaultValue && opts.encode ? opts.encode(defaultValue) : undefined;
+            if (currentEncodedState !== newEncodedValue) {
+                setState(defaultValue);
+            }
             // When there's no scope, set as not initialized
-            setState(defaultValue);
             setInitialized(false);
         }
     }, [getDecodedValue, opts.shouldInitialize, defaultValue, scopedStorageKey]);
@@ -102,9 +109,8 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
                 if (opts.encode && opts.decode && typeof value !== 'undefined') {
                     const encodedState = state ? opts.encode(state) : undefined;
                     const encodedValue = opts.encode(value);
-                    const isValueDifferent = encodedState !== encodedValue;
                     // Only set the state if the encoded value is different.
-                    if (isValueDifferent) {
+                    if (encodedState !== encodedValue) {
                         try {
                             // Ensure we can decode it, too
                             opts.decode(encodedValue);
