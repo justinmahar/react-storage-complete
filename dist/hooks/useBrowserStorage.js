@@ -27,6 +27,7 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
         options.storageEventListenerDisabled,
     ]); // Don't include `options` or the encoders, they may change on every render
     const [initialized, setInitialized] = react_1.default.useState(!!opts.shouldInitialize);
+    const hookUuid = react_1.default.useRef(uuid());
     const scopedStorageKey = react_1.default.useMemo(() => `${opts.prefix ? `${opts.prefix}${opts.prefixSeparator}` : ''}${key}`, [key, opts.prefix, opts.prefixSeparator]);
     const defaultValue = react_1.default.useMemo(() => defaultWhenUndefined, []); // Don't include defaultWhenUndefined, it may change on every render
     const getDecodedValue = react_1.default.useCallback(() => {
@@ -59,8 +60,8 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
     react_1.default.useEffect(() => {
         const subs = new react_sub_unsub_1.Subs();
         if (!opts.emitterDisabled) {
-            const changeEventListener = (changedKey, storageArea) => {
-                if (scopedStorageKey === changedKey && storage === storageArea) {
+            const changeEventListener = (changedKey, storageArea, sourceUuid) => {
+                if (scopedStorageKey === changedKey && storage === storageArea && hookUuid.current !== sourceUuid) {
                     try {
                         setState(getDecodedValue());
                     }
@@ -106,7 +107,7 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
                         setState(value);
                         storage[scopedStorageKey] = encoded;
                         if (!opts.emitterDisabled) {
-                            exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage);
+                            exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage, hookUuid.current);
                         }
                     }
                     catch (e) {
@@ -117,7 +118,7 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
                     setState(null);
                     delete storage[scopedStorageKey];
                     if (!opts.emitterDisabled) {
-                        exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage);
+                        exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage, hookUuid.current);
                     }
                 }
             }
@@ -143,3 +144,22 @@ exports.defaultDecode = defaultDecode;
 exports.EMITTER_CHANGE_EVENT_NAME = 'change';
 exports.storageEventEmitter = new events_1.default();
 exports.storageEventEmitter.setMaxListeners(100);
+// Source: https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid
+const uuid = () => {
+    let d = new Date().getTime(); //Timestamp
+    let d2 = (typeof performance !== 'undefined' && performance.now && performance.now() * 1000) || 0; //Time in microseconds since page-load or 0 if unsupported
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        let r = Math.random() * 16; //random number between 0 and 16
+        if (d > 0) {
+            //Use timestamp until depleted
+            r = (d + r) % 16 | 0;
+            d = Math.floor(d / 16);
+        }
+        else {
+            //Use microseconds since page-load if supported
+            r = (d2 + r) % 16 | 0;
+            d2 = Math.floor(d2 / 16);
+        }
+        return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    });
+};
