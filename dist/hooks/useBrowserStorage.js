@@ -100,22 +100,27 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
         if (opts.shouldInitialize) {
             try {
                 if (opts.encode && opts.decode && typeof value !== 'undefined') {
-                    const encoded = opts.encode(value);
-                    try {
-                        // Ensure we can decode it, too
-                        opts.decode(encoded);
-                        setState(value);
-                        storage[scopedStorageKey] = encoded;
-                        if (!opts.emitterDisabled) {
-                            exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage, hookUuid.current);
+                    const encodedState = state ? opts.encode(state) : undefined;
+                    const encodedValue = opts.encode(value);
+                    const isValueDifferent = encodedState !== encodedValue;
+                    // Only set the state if the encoded value is different.
+                    if (isValueDifferent) {
+                        try {
+                            // Ensure we can decode it, too
+                            opts.decode(encodedValue);
+                            setState(value);
+                            storage[scopedStorageKey] = encodedValue;
+                            if (!opts.emitterDisabled) {
+                                exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage, hookUuid.current);
+                            }
+                        }
+                        catch (e) {
+                            console.error('Error while testing decoding during set operation:', scopedStorageKey, 'Error:', e, 'Value was:', value, 'Could not decode after encoded as:', encodedValue, 'This value could not be decoded properly. Try 1) checking the value, 2) checking your decoder, or 3) if using the default decoder (which uses JSON.parse), try specifying your own.');
                         }
                     }
-                    catch (e) {
-                        console.error('Error while testing decoding during set operation:', scopedStorageKey, 'Error:', e, 'Value was:', value, 'Could not decode after encoded as:', encoded, 'This value could not be decoded properly. Try 1) checking the value, 2) checking your decoder, or 3) if using the default decoder (which uses JSON.parse), try specifying your own.');
-                    }
                 }
-                if (typeof value === 'undefined') {
-                    setState(null);
+                if (typeof value === 'undefined' && typeof state !== 'undefined') {
+                    setState(undefined);
                     delete storage[scopedStorageKey];
                     if (!opts.emitterDisabled) {
                         exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage, hookUuid.current);
@@ -126,7 +131,7 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
                 console.error('Error while encoding:', scopedStorageKey, 'Error:', e, 'Bad value was:', value, 'This value could not be encoded properly. Try 1) checking the value as you may have provided a value that the encoder could not convert to a string, 2) checking your encoder, or 3) if using the default encoder (which uses JSON.stringify), try specifying your own.');
             }
         }
-    }, [opts, scopedStorageKey, storage]);
+    }, [opts, scopedStorageKey, state, storage]);
     const clear = react_1.default.useCallback(() => {
         setStateCombined(undefined);
     }, [setStateCombined]);
@@ -134,11 +139,11 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
 }
 exports.useBrowserStorage = useBrowserStorage;
 function defaultEncode(value) {
-    return value !== null && typeof value !== 'undefined' ? JSON.stringify(value) : null;
+    return value !== null ? JSON.stringify(value) : null;
 }
 exports.defaultEncode = defaultEncode;
 function defaultDecode(itemString) {
-    return itemString !== null && typeof itemString !== 'undefined' ? JSON.parse(itemString) : null;
+    return itemString !== null ? JSON.parse(itemString) : null;
 }
 exports.defaultDecode = defaultDecode;
 exports.EMITTER_CHANGE_EVENT_NAME = 'change';
