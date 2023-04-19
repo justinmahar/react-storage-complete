@@ -126,7 +126,7 @@ function useBrowserStorage(key, defaultWhenUndefined, storage, options = exports
                     }
                 }
                 if (typeof value === 'undefined' && typeof state !== 'undefined') {
-                    setState(undefined);
+                    setState(defaultValue);
                     delete storage[scopedStorageKey];
                     if (!opts.emitterDisabled) {
                         exports.storageEventEmitter.emit(exports.EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage, hookUuid.current);
