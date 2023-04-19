@@ -41,6 +41,8 @@ export function useBrowserStorage<T = any>(
   ]); // Don't include `options` or the encoders, they may change on every render
   const [initialized, setInitialized] = React.useState(!!opts.shouldInitialize);
 
+  const hookUuid = React.useRef(uuid());
+
   const scopedStorageKey = React.useMemo(
     () => `${opts.prefix ? `${opts.prefix}${opts.prefixSeparator}` : ''}${key}`,
     [key, opts.prefix, opts.prefixSeparator],
@@ -87,8 +89,8 @@ export function useBrowserStorage<T = any>(
   React.useEffect(() => {
     const subs = new Subs();
     if (!opts.emitterDisabled) {
-      const changeEventListener = (changedKey: string, storageArea: Storage) => {
-        if (scopedStorageKey === changedKey && storage === storageArea) {
+      const changeEventListener = (changedKey: string, storageArea: Storage, sourceUuid: string) => {
+        if (scopedStorageKey === changedKey && storage === storageArea && hookUuid.current !== sourceUuid) {
           try {
             setState(getDecodedValue());
           } catch (e) {
@@ -135,7 +137,7 @@ export function useBrowserStorage<T = any>(
               setState(value);
               storage[scopedStorageKey] = encoded;
               if (!opts.emitterDisabled) {
-                storageEventEmitter.emit(EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage);
+                storageEventEmitter.emit(EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage, hookUuid.current);
               }
             } catch (e) {
               console.error(
@@ -155,7 +157,7 @@ export function useBrowserStorage<T = any>(
             setState(null);
             delete storage[scopedStorageKey];
             if (!opts.emitterDisabled) {
-              storageEventEmitter.emit(EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage);
+              storageEventEmitter.emit(EMITTER_CHANGE_EVENT_NAME, scopedStorageKey, storage, hookUuid.current);
             }
           }
         } catch (e) {
@@ -195,3 +197,22 @@ export function defaultDecode<T>(itemString: string | null): T | null {
 export const EMITTER_CHANGE_EVENT_NAME = 'change';
 export const storageEventEmitter = new EventEmitter();
 storageEventEmitter.setMaxListeners(100);
+
+// Source: https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid
+const uuid = () => {
+  let d = new Date().getTime(); //Timestamp
+  let d2 = (typeof performance !== 'undefined' && performance.now && performance.now() * 1000) || 0; //Time in microseconds since page-load or 0 if unsupported
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    let r = Math.random() * 16; //random number between 0 and 16
+    if (d > 0) {
+      //Use timestamp until depleted
+      r = (d + r) % 16 | 0;
+      d = Math.floor(d / 16);
+    } else {
+      //Use microseconds since page-load if supported
+      r = (d2 + r) % 16 | 0;
+      d2 = Math.floor(d2 / 16);
+    }
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+  });
+};
