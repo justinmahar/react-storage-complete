@@ -4,7 +4,7 @@ import { DEFAULT_BROWSER_STORAGE_OPTIONS, StorageOptions, StorageState, useBrows
 /**
  * Access a `localStorage` item. Use this in a similar fashion to `React.useState()`.
  *
- * See the [documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--page).
+ * See the [documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--docs).
  *
  * Examples:
  *
@@ -18,8 +18,8 @@ import { DEFAULT_BROWSER_STORAGE_OPTIONS, StorageOptions, StorageState, useBrows
  *
  * @param key The key for the stored item.
  * @param defaultWhenUndefined The default value for the item when it is undefined in `localStorage`.
- * @param options Options for the stored item. See the [documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--page#props) for more.
- * @returns The storage state. See the [documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--page#return) for details.
+ * @param options Options for the stored item. See the [documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--docs#props) for more.
+ * @returns The storage state. See the [documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--docs#return) for details.
  */
 export function useLocalStorage<T = any>(
   key: string,

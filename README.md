@@ -80,8 +80,8 @@ npm i react-storage-complete
 
 | Use this hook...                                                                                                     | For this Storage API...                                                                    | Storage Description                                                                                                                                      |
 | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [useLocalStorage](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--page)     | [`localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)     | The `localStorage` object stores data with no expiration date. The data is not deleted when the browser is closed, and is available for future sessions. |
-| [useSessionStorage](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-usesessionstorage--page) | [`sessionStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) | The `sessionStorage` object stores data for only one session. The data is deleted when the browser is closed.                                            |
+| [useLocalStorage](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--docs)     | [`localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)     | The `localStorage` object stores data with no expiration date. The data is not deleted when the browser is closed, and is available for future sessions. |
+| [useSessionStorage](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-usesessionstorage--docs) | [`sessionStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) | The `sessionStorage` object stores data for only one session. The data is deleted when the browser is closed.                                            |
 
 #### Basic Usage
 
@@ -176,8 +176,8 @@ In the example above, the prefixed key would be `my-namespace.food`.
 
 See the documentation for additional options and uses:
 
-- [useLocalStorage documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--page)
-- [useSessionStorage documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-usesessionstorage--page)
+- [useLocalStorage documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-uselocalstorage--docs)
+- [useSessionStorage documentation](https://justinmahar.github.io/react-storage-complete/?path=/story/hooks-usesessionstorage--docs)
 
 <!-- [lock:typescript] 🚫--------------------------------------- -->
 
@@ -213,4 +213,4 @@ If you found this project helpful, let the community know by giving it a [star](
 
 ## License
 
-See [LICENSE.md](https://justinmahar.github.io/react-storage-complete/?path=/story/license--page).
+See [LICENSE.md](https://justinmahar.github.io/react-storage-complete/?path=/docs/license--docs).
