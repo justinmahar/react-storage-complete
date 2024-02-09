@@ -1,6 +1,6 @@
 {
   "name": "react-storage-complete",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "coreVersion": "3.0.4",
   "author": "Justin Mahar <contact@justinmahar.com>",
   "description": "🗄️ React hooks for accessing localStorage and sessionStorage, with syncing and prefix support. The complete package.",
