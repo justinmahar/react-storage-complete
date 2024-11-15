@@ -1,6 +1,7 @@
 import React from 'react';
 import EventEmitter from 'events';
 import { Subs } from 'react-sub-unsub';
+import { useClientReady } from './useClientReady';
 
 export interface StorageOptions<T> {
   prefix?: string;
@@ -39,6 +40,8 @@ export function useBrowserStorage<T = any>(
     options.emitterDisabled,
     options.storageEventListenerDisabled,
   ]); // Don't include `options` or the encoders, they may change on every render
+
+  const clientReady = useClientReady();
   const [initialized, setInitialized] = React.useState(!!opts.shouldInitialize);
 
   const hookUuid = React.useRef(uuid());
@@ -76,7 +79,7 @@ export function useBrowserStorage<T = any>(
   // If the scope, key, storage, or opts.shouldInitialize change, decode and set the value, and set it as initialized.
   React.useEffect(() => {
     const currentEncodedState = state && opts.encode ? opts.encode(state) : undefined;
-    if (opts.shouldInitialize) {
+    if (opts.shouldInitialize && clientReady) {
       const newEncodedValue = storage[scopedStorageKey];
       if (currentEncodedState !== newEncodedValue) {
         setState(getDecodedValue());
@@ -90,7 +93,7 @@ export function useBrowserStorage<T = any>(
       // When there's no scope, set as not initialized
       setInitialized(false);
     }
-  }, [getDecodedValue, opts.shouldInitialize, defaultValue, scopedStorageKey]);
+  }, [getDecodedValue, opts.shouldInitialize, defaultValue, scopedStorageKey, clientReady]);
 
   // Sync with all hook instances through an emitter
   React.useEffect(() => {
@@ -134,7 +137,7 @@ export function useBrowserStorage<T = any>(
 
   const setStateCombined = React.useCallback(
     (value: T | null | undefined) => {
-      if (opts.shouldInitialize) {
+      if (opts.shouldInitialize && clientReady) {
         try {
           if (opts.encode && opts.decode && typeof value !== 'undefined') {
             const encodedState = state ? opts.encode(state) : undefined;
@@ -184,7 +187,7 @@ export function useBrowserStorage<T = any>(
         }
       }
     },
-    [opts, scopedStorageKey, state, storage],
+    [opts, scopedStorageKey, state, storage, clientReady],
   );
 
   const clear = React.useCallback(() => {
